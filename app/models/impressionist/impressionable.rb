@@ -42,7 +42,7 @@ module Impressionist
       # Count all distinct impressions unless the :all filter is provided.
       distinct = options[:filter] != :all
       if Rails::VERSION::MAJOR == 4
-        distinct ? imps.distinct.count(options[:filter]) : imps.count
+        distinct ? imps.count("DISTINCT #{self.class.connection.quote_column_name(options[:filter])}") : imps.count
       else
         distinct ? imps.count(options[:filter], :distinct => true) : imps.count
       end
